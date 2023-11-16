@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:4200")
 
 @RestController
 @RequestMapping("/api/parking")
@@ -33,6 +32,7 @@ public class ParkingController {
     @Autowired
     private ActualizarHoraSalidaParkingUseCase actualizarHoraSalidaParkingUseCase;
 
+    @Autowired
     private ActualizarInformacionParkingUseCase actualizarInformacionParkingUseCase;
 
 
@@ -59,15 +59,15 @@ public class ParkingController {
         this.deleteParkingByIdUseCase.execute(id);
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = "/update/{id}")
     public void actualizarHoraSalidaParkingById(@PathVariable(value = "id") Long id) {
 
         this.actualizarHoraSalidaParkingUseCase.execute(id);
     }
 
-    @PutMapping(value = "/{placa}")
-    public void actualizarInformacionParkingByPlaca(@PathVariable(value = "placa") String placa) {
-        actualizarInformacionParkingUseCase.execute(placa);
+    @PutMapping(value = "/updateParking/{id}")
+    public void actualizarInformacionParking(@PathVariable(value = "id") Long id,@RequestBody ParkingDto parkingDto) {
+        actualizarInformacionParkingUseCase.execute(id,parkingDto);
 
 
     }

@@ -4,6 +4,7 @@
     <div class="input-group mb-3">
       <input type="text" class="form-control" placeholder="Buscar por Placa" [(ngModel)]="placaSearch">
       <button class="btn btn-outline-secondary" type="button" (click)="searchByPlaca()">Buscar</button>
+      <button class="btn btn-outline-secondary" type="button" (click)="loadAllVehiculos()">Recargar</button>
     </div>
     <div class="table-responsive">
       <table class="table table-hover align-middle text-nowrap table-bordered table-striped">
@@ -19,12 +20,18 @@
         </thead>
         <tbody>
         <tr *ngFor="let user of listUser">
+
           <td>
             {{user.id}}
           </td>
-          <td>
-            {{user.placa}}
-          </td>
+        <td>
+         <ng-container *ngIf="!user.isEditing; else editPlaca">
+            {{ user.placa }}
+        </ng-container>
+          <ng-template #editPlaca>
+          <input [(ngModel)]="user.placa" class="form-control" />
+        </ng-template>
+        </td>
           <td>
             {{user.horaEntrada}}
           </td>
@@ -32,15 +39,32 @@
             {{user.horaSalida}}
           </td>
           <td>
-            {{user.tipoVehiculo}}
-          </td>
+         <ng-container *ngIf="!user.isEditing; else editTipoVehiculo">
+            {{ user.tipoVehiculo}}
+        </ng-container>
+          <ng-template #editTipoVehiculo>
+          <input [(ngModel)]="user.tipoVehiculo" class="form-control" />
+        </ng-template>
+        </td>
 
-          <td>
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-              <button type="button" class="btn btn-info btn-sm" (click)="horaSalida(user.id)">Ver Salida</button>
-              <button type="button" class="btn btn-secondary btn-sm" (click)="deleteVehiculo(user.id)">ELIMINAR</button>
-            </div>
-          </td>
+
+
+
+
+<td>
+  <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+    <ng-container *ngIf="!user.isEditing; else editButtons">
+      <button type="button" class="btn btn-info btn-sm" (click)="horaSalida(user.id)">Ver Salida</button>
+      <button type="button" class="btn btn-info btn-sm" (click)="toggleEdit(user)">Actualizar</button>
+    </ng-container>
+    <ng-template #editButtons>
+      <button type="button" class="btn btn-danger btn-sm" (click)="toggleEdit(user)">Cancelar</button>
+      <button type="button" class="btn btn-success btn-sm" (click)="updateVehiculo(user)">Actualizar</button>
+    </ng-template>
+    <button type="button" class="btn btn-secondary btn-sm" (click)="deleteVehiculo(user.id)">ELIMINAR</button>
+  </div>
+</td>
+
         </tr>
         </tbody>
       </table>

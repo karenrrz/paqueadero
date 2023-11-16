@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { UserModel } from "../../domain/vehiculo-in/vehiculo.model";
-import { VehiculoService } from "../../domain/vehiculo-in/vehiculo.service";
+import { VehiculoModel } from 'src/app/domain/vehiculo/vehiculo.model';
+import { VehiculoService } from 'src/app/domain/vehiculo/vehiculo.service';
 
 @Component({
     selector: 'app-vehiculo-in',
@@ -8,10 +8,14 @@ import { VehiculoService } from "../../domain/vehiculo-in/vehiculo.service";
     styleUrls: ['./vehiculo-in.component.scss']
 })
 export class VehiculoInComponent {
-    listUser: UserModel[] = [];
+    listUser: VehiculoModel[] = [];
     placaSearch: string = '';
 
+
     constructor(private vehiculoService: VehiculoService) {}
+
+
+    isEditing:boolean=false
 
     ngOnInit(): void {
         this.loadAllVehiculos();
@@ -22,17 +26,16 @@ export class VehiculoInComponent {
             this.listUser = data;
             console.log(data);
         });
+
     }
 
-    searchByPlaca(): void {
-        if (this.placaSearch) {
-            this.vehiculoService.getVehiculoByPlaca(this.placaSearch).subscribe(data => {
-                this.listUser = data ? [data] : [];
-            });
-        } else {
-            this.loadAllVehiculos();
-        }
-    }
+    searchByPlaca(){
+
+       this.listUser = this.placaSearch ?
+        this.listUser.filter(vehicle => vehicle.placa.includes(this.placaSearch)) :
+        [...this.listUser];
+
+           }
 
     horaSalida(id: number): void {
         this.vehiculoService.horaSalida(id).subscribe(updatedUser => {
@@ -56,5 +59,19 @@ export class VehiculoInComponent {
             this.loadAllVehiculos();
         });
     }
+
+    updateVehiculo(user:any):void {
+
+      this.vehiculoService.updateVehiculo(user.id,user).subscribe(updatedUser => {
+            console.log('Hora de salida actualizada con éxito.');
+            this.loadAllVehiculos()
+            // Encuentra y actualiza el vehículo en la lista
+            })
+
+      console.log(user)
+    }
+      toggleEdit(user: any): void {
+       user.isEditing = !user.isEditing;
+      }
 
     }

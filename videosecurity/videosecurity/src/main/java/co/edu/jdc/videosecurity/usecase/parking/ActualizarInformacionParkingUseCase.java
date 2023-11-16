@@ -18,14 +18,21 @@ public class ActualizarInformacionParkingUseCase {
         this.parkingRepository = parkingRepository;
     }
 
-    public void execute( String placa){
-        if(parkingRepository.existParking(Long.valueOf(placa)).intValue() == 0)
-            throw new ParkingException("Carro no encontrado");
+    public void execute(Long id, ParkingDto parkingDto){
+      
+       System.out.println("Datos de entrada" + parkingDto);
 
-        Parking parking = this.parkingRepository.findParkingByPlaca(Long.valueOf(placa));
+      if(parkingRepository.existParking(id).intValue() == 0)
+            throw new ParkingException("Parking not found");
+        Parking parking = this.parkingRepository.findParkingById(id);
 
-        // Actualizar placa
-        parking.setPlaca(placa);
+
+       System.out.println("Datos de entrada" + parkingDto.getPlaca());
+       System.out.println("Datos de entrada" + parkingDto.getTipoVehiculo());
+
+        parking.setPlaca(parkingDto.getPlaca());
+        parking.setTipoVehiculo(parkingDto.getTipoVehiculo());
+
 
         this.parkingRepository.save(parking);
     }

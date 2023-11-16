@@ -22,7 +22,7 @@ public class Parking {
     @Column(name = "horasalida", nullable = true)
     private String horaSalida;
 
-    @Column(name = "tipovehiculo", length = 6, nullable = true)
+    @Column(name = "tipovehiculo", length = 10, nullable = true)
     private String tipoVehiculo;
 }
 

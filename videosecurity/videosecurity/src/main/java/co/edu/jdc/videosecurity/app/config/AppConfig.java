@@ -17,6 +17,10 @@ public class AppConfig {
     }
 
     @Bean
+    public ActualizarInformacionParkingUseCase actualizarInformacionParkingUseCase(){
+        return new ActualizarInformacionParkingUseCase(parkingRepository);
+    }
+   @Bean
     public ActualizarHoraSalidaParkingUseCase actualizarHoraSalidaParkingUseCase(){
         return new ActualizarHoraSalidaParkingUseCase(parkingRepository);
     }
